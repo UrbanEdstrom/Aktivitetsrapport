@@ -5,6 +5,8 @@ VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aktivitetsrapport", "Aktivitetsrapport\Aktivitetsrapport.csproj", "{ADCA048F-8AA1-4D72-A6E9-00A275A79FA5}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Aktivitetsrapport Setup", "Aktivitetsrapport Setup\Aktivitetsrapport Setup.vdproj", "{5B36C440-C67D-44F3-B13E-68A7A476D77F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{ADCA048F-8AA1-4D72-A6E9-00A275A79FA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADCA048F-8AA1-4D72-A6E9-00A275A79FA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADCA048F-8AA1-4D72-A6E9-00A275A79FA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B36C440-C67D-44F3-B13E-68A7A476D77F}.Debug|Any CPU.ActiveCfg = Debug
+		{5B36C440-C67D-44F3-B13E-68A7A476D77F}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
