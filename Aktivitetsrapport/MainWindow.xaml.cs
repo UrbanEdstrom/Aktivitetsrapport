@@ -24,8 +24,8 @@ using Aktivitetsrapport.Properties;
 using Microsoft.Win32;
 using System.Windows.Forms;
 using System.Diagnostics;
-using Aktivitetsrapport.Properties;
 using System.Globalization;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace Aktivitetsrapport
 {
@@ -89,13 +89,16 @@ namespace Aktivitetsrapport
             btn_save.ToolTip = "Spara rapporten som png-fil";
             btn_cli.ToolTip = "Kör Actipass vilket genererar matlab filen som sedan hittas med bläddra knappen";
 
-            txt_info.Text = "1. För att skapa rapporten används en matlab-fil (.mat) som genereras av Actipass.\n" +
-                            "   Filen finns i arbetskatalogen som Actipass använder och sökvägen är:\n" +
-                            "   Actipass arbetskatalog\\IndividualOut\\sensor\\sensor - Activity_per_s.mat\n" +
+            txt_info.Text = "1. ActiPASS behöver analysera data från rörelsesensorn och skapa en fil med aktiviteter. " +
+                            "Detta kan göras genom att köra ActiPASS på vanligt sätt eller genom att anropa ActiPASS härifrån.\n" +
+                            "\n" + 
+                            "2. För att skapa rapporten används en matlab-fil (.mat) med aktiviteter. " +
+                            "Filen finns i arbetskatalogen som ActiPASS använder och sökvägen är:\n" +
+                            "arbetskatalog\\IndividualOut\\sensornr\\sensornr - Activity_per_s.mat\n" +
                             "\n" +
-                            "2. När filen valts ut med bläddra knappen kommer rapporten att skapas.\n" +
+                            "3. När filen valts ut med bläddra knappen kommer rapporten att skapas.\n" +
                             "\n" +
-                            "3. Rapporten kan skrivas ut eller sparas till png-fil.";
+                            "4. Rapporten kan skrivas ut eller sparas till png-fil.";
 
 
             try
@@ -224,8 +227,8 @@ namespace Aktivitetsrapport
                     {
                         return;
                     }
+                    
                     Properties.Settings.Default.MatPath = dialog.FileName;
-
                     Properties.Settings.Default.Save();
 
                     open_mat_file();
@@ -332,43 +335,21 @@ namespace Aktivitetsrapport
             this.matpath = Properties.Settings.Default.MatPath;
             this.cli_command = Properties.Settings.Default.CLI_Command;
 
+            txt_cli.Text = cli_command;
+            txt_path.Text = matpath;
+
             this.walkActs = Properties.Settings.Default.Walk.Split(',').Select(s => Int32.Parse(s)).ToArray();
             this.sitlieActs = Properties.Settings.Default.SitLie.Split(',').Select(s => Int32.Parse(s)).ToArray();
             this.standActs = Properties.Settings.Default.Stand.Split(',').Select(s => Int32.Parse(s)).ToArray();
             this.sleepActs = Properties.Settings.Default.Sleep.Split(',').Select(s => Int32.Parse(s)).ToArray();
 
+        }
 
-            if (cli_command.Equals(""))
-            {
-                txt_cli.Text = cli_command;
-                txt_cli.Visibility = Visibility.Collapsed;
-                btn_cli.Visibility = Visibility.Collapsed;
-
-                txt_cli.SetValue(Grid.RowProperty, 3);
-                btn_cli.SetValue(Grid.RowProperty, 3);
-                txt_path.SetValue(Grid.RowProperty, 1);
-                btn_path.SetValue(Grid.RowProperty, 2);
-                btn_print.SetValue(Grid.RowProperty, 2);
-                btn_save.SetValue(Grid.RowProperty, 2);
-
-            }
-            else
-            {
-                txt_cli.Text = cli_command;
-                txt_cli.Visibility = Visibility.Visible;
-                btn_cli.Visibility = Visibility.Visible;
-
-                txt_cli.SetValue(Grid.RowProperty, 1);
-                btn_cli.SetValue(Grid.RowProperty, 1);
-                txt_path.SetValue(Grid.RowProperty, 2);
-                btn_path.SetValue(Grid.RowProperty, 3);
-                btn_print.SetValue(Grid.RowProperty, 3);
-                btn_save.SetValue(Grid.RowProperty, 3);
-
-            }
-
-            txt_path.Text = matpath;
-
+        private void SaveSettings()
+        {
+            Properties.Settings.Default.MatPath = txt_path.Text;
+            Properties.Settings.Default.CLI_Command = txt_cli.Text;
+            Properties.Settings.Default.Save();
         }
 
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
@@ -413,9 +394,23 @@ namespace Aktivitetsrapport
                     cmd.StandardInput.WriteLine(txt_cli.Text);
                     cmd.StandardInput.Flush();
                     cmd.StandardInput.Close();
+                    
                     cmd.WaitForExit();
-                    Console.WriteLine(cmd.StandardOutput.ReadToEnd());
+                    //Console.WriteLine(cmd.StandardOutput.ReadToEnd());
+                    cmd.Close();
                 }
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            try 
+            {
+                SaveSettings();
             }
             catch (Exception ex)
             {
