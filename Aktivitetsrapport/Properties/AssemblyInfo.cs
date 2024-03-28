@@ -10,7 +10,7 @@ using System.Windows;
 [assembly: AssemblyTitle("Aktivitetsrapport")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("RV")]
+[assembly: AssemblyCompany("Region Västerbotten")]
 [assembly: AssemblyProduct("Aktivitetsrapport")]
 [assembly: AssemblyCopyright("Copyright © Region Västerbotten 2024")]
 [assembly: AssemblyTrademark("")]

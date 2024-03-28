@@ -138,10 +138,15 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="icons\cog_icon.ico" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="icons\sitting-on-a-chair.ico" />
     <Resource Include="icons\sitting-on-a-chair_white.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\AR_logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.5.0.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.5.0.0\build\MaterialDesignThemes.targets')" />

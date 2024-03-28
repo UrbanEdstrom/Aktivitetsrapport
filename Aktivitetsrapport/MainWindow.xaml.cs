@@ -18,14 +18,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using MatFileHandler;
 
-using PrintDialog = System.Windows.Controls.PrintDialog;
-using System.Printing;
-using Aktivitetsrapport.Properties;
-using Microsoft.Win32;
 using System.Windows.Forms;
 using System.Diagnostics;
-using System.Globalization;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
+
 
 namespace Aktivitetsrapport
 {
@@ -89,10 +84,10 @@ namespace Aktivitetsrapport
             btn_save.ToolTip = "Spara rapporten som png-fil";
             btn_cli.ToolTip = "Kör Actipass vilket genererar matlab filen som sedan hittas med bläddra knappen";
 
-            txt_info.Text = "1. ActiPASS behöver analysera data från rörelsesensorn och skapa en fil med aktiviteter. " +
-                            "Detta kan göras genom att köra ActiPASS på vanligt sätt eller genom att anropa ActiPASS härifrån.\n" +
+            txt_info.Text = "1. Aktivitetsrapport behöver en fil med aktiviteter från ActiPASS. Filen skapas automatiskt när ActiPASS körs. " +
+                            "Detta kan göras genom att köra ActiPASS på vanligt sätt eller genom att skriva in ett kommando härifrån.\n" +
                             "\n" + 
-                            "2. För att skapa rapporten används en matlab-fil (.mat) med aktiviteter. " +
+                            "2. För att sedan skapa rapporten måste man öppna aktuell sensors matlab-fil (.mat) med aktiviteter. " +
                             "Filen finns i arbetskatalogen som ActiPASS använder och sökvägen är:\n" +
                             "arbetskatalog\\IndividualOut\\sensornr\\sensornr - Activity_per_s.mat\n" +
                             "\n" +
@@ -272,9 +267,7 @@ namespace Aktivitetsrapport
 
                 reportimage.Source = bitmap;
 
-
-                //now print the visual to printer to fit on the one page.
-                printDlg.PrintVisual(reportimage, "First Fit to Page WPF Print");
+                printDlg.PrintVisual(reportimage, "Aktivitetsrapport");
 
             }
 
