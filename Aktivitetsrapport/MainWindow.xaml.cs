@@ -125,8 +125,6 @@ namespace Aktivitetsrapport
 
         }
 
-        //NonWear=0, Lie=1, Sit=2, Stand=3, Move=4, Walk=5, Run=6, Stair=7, Cycle=8, Other=9, Sleep=10, LieStill=11
-
         private List<Hour> read_mat(string matpath)
         {
 
@@ -141,8 +139,6 @@ namespace Aktivitetsrapport
                 IVariable variable = matFile["aktTbl"];
 
                 var matObject = matFile["aktTbl"].Value as IMatObject;
-
-                //vararray = (IArray)
 
                 TableAdapter ta = new TableAdapter(matObject);
 
