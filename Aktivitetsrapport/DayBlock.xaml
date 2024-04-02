@@ -196,7 +196,7 @@
                     <TextBlock x:Name="txt_stand" Style="{StaticResource Body}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Image Source="icon/sitting-on-a-chair.ico" Margin="2,2,5,0" Width="17" />
+                    <Image Source="icons/sitting-on-a-chair.ico" Margin="2,2,5,0" Width="18" />
                     <TextBlock x:Name="txt_sitlie" Style="{StaticResource Body}" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
