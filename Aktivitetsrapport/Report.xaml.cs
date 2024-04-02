@@ -64,12 +64,10 @@ namespace Aktivitetsrapport
             List<ChartValues<double>> daySleep = new List<ChartValues<double>>();
             List<double[]> daySteps = new List<double[]>();
 
-            //List<ChartValues<double>> weekActs = new List<ChartValues<double>>();
-
+            
             //Get weekdata from list
             DayOfWeek day = newlist[0].Date.DayOfWeek;
-            //weekActs.Add(new ChartValues<double>(new double[13]));
-
+            
             dayWalk.Add(new ChartValues<double>(new double[24]));
             dayStand.Add(new ChartValues<double>(new double[24]));
             daySitLie.Add(new ChartValues<double>(new double[24]));
@@ -85,7 +83,6 @@ namespace Aktivitetsrapport
 
                     weekdays.Add(swedish.DateTimeFormat.DayNames[(int)day]);
                     day = item.Date.DayOfWeek;
-                    //weekActs.Add(new ChartValues<double>(new double[13]));
                     dayWalk.Add(new ChartValues<double>(new double[24]));
                     dayStand.Add(new ChartValues<double>(new double[24]));
                     daySitLie.Add(new ChartValues<double>(new double[24]));
@@ -122,9 +119,8 @@ namespace Aktivitetsrapport
                 dayWalk[dayWalk.Count - 1][hour] += Math.Round((sumWalkActs) / 60, 1);
                 dayStand[dayStand.Count - 1][hour] += Math.Round(sumStandActs / 60, 1);
                 daySitLie[daySitLie.Count - 1][hour] -= Math.Round((sumSitLieActs) / 60, 1);
-                daySleep[daySitLie.Count - 1][hour] -= Math.Round(sumSleepActs / 60, 1);
-
-                daySteps[dayStand.Count - 1][hour] += item.Steps;
+                daySleep[daySleep.Count - 1][hour] -= Math.Round(sumSleepActs / 60, 1);
+                daySteps[daySteps.Count - 1][hour] += item.Steps;
 
             }
             weekdays.Add(swedish.DateTimeFormat.DayNames[(int)day]);
