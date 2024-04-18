@@ -87,7 +87,7 @@ namespace Aktivitetsrapport
             txt_info.Text = "1. Aktivitetsrapport behöver en fil med aktiviteter från ActiPASS. Filen skapas automatiskt när ActiPASS körs. " +
                             "Detta kan göras genom att köra ActiPASS på vanligt sätt eller genom att skriva in ett kommando härifrån.\n" +
                             "\n" + 
-                            "2. För att sedan skapa rapporten måste man öppna aktuell sensors matlab-fil (.mat) med aktiviteter. " +
+                            "2. För att skapa rapporten öppnas aktuell sensors matlab-fil (.mat) med aktiviteter. " +
                             "Filen finns i arbetskatalogen som ActiPASS använder och sökvägen är:\n" +
                             "arbetskatalog\\IndividualOut\\sensornr\\sensornr - Activity_per_s.mat\n" +
                             "\n" +

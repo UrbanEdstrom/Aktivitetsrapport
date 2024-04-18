@@ -189,7 +189,7 @@ namespace Aktivitetsrapport
 
             weekdaylist = weekdaylist.Select(x => x = x.Substring(0, 3)).ToList();
 
-            _weekStackedBarChartLabels = weekdaylist.ToArray();
+            WeekStackedBarChartLabels = weekdaylist.ToArray();
             WeekStackedBarChartAxisY.LabelFormatter = AbsFormatter;
 
             double daymeanstep = 0, workmeanstep = 0, weekendmeanstep = 0,
@@ -254,7 +254,7 @@ namespace Aktivitetsrapport
 
                 DayBlock dayblock = new DayBlock();
 
-                _dayStackedBarChartData[daynum] = new SeriesCollection
+                DayStackedBarChartData[daynum] = new SeriesCollection
                 {
 
                     new StackedColumnSeries
@@ -285,17 +285,17 @@ namespace Aktivitetsrapport
 
                 };
 
-                dayblock.dayChart.Series = _dayStackedBarChartData[daynum];
+                dayblock.dayChart.Series =DayStackedBarChartData[daynum];
 
                 // Init labels
                 for (int i = 0; i < 24; i++)
                 {
                     // Use TimeSpan to format hours and minutes
                     TimeSpan time = new TimeSpan(i, 0, 0);
-                    _dayStackedBarChartLabels[i] = time.ToString("hh");
+                    DayStackedBarChartLabels[i] = time.ToString("hh");
                 }
 
-                dayblock.X_axislabels.Labels = _dayStackedBarChartLabels;
+                dayblock.X_axislabels.Labels = DayStackedBarChartLabels;
                 dayblock.StackedBarChartAxisY.LabelFormatter = AbsFormatter;
 
                 //Init piechart 
@@ -304,7 +304,7 @@ namespace Aktivitetsrapport
                 double sumsitlie = CalcDailyActivityDistribution(daynum, 2);
                 double sumsleep = CalcDailyActivityDistribution(daynum, 3);
 
-                _pieChartData[daynum] = new SeriesCollection
+                PieChartData[daynum] = new SeriesCollection
                 {
                     new PieSeries
                     {
@@ -341,7 +341,7 @@ namespace Aktivitetsrapport
                 dayblock.txt_steps.Text = String.Format("{0:0}", sumsteps);
 
 
-                dayblock.pieChart.Series = _pieChartData[daynum];
+                dayblock.pieChart.Series = PieChartData[daynum];
 
                 dayblock.txt_day.Text = weekdaylist[daynum];
 
@@ -353,7 +353,7 @@ namespace Aktivitetsrapport
 
         private double CalcDailyActivityDistribution(int daynum, int i)
         {
-            return _dayStackedBarChartData[daynum][i].Values.Cast<double>().Select(Math.Abs).ToArray().Sum();
+            return DayStackedBarChartData[daynum][i].Values.Cast<double>().Select(Math.Abs).ToArray().Sum();
         }
 
         public void RaisePropertyChanged([CallerMemberName] string propertyname = null)

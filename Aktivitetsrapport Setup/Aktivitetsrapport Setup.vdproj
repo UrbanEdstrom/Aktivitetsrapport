@@ -141,7 +141,7 @@
         "DisplayName" = "8:Debug"
         "IsDebugOnly" = "11:TRUE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Debug\\Aktivitetsrapport Setup.msi"
+        "OutputFilename" = "8:Debug\\Aktivitetsrapport_Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -190,6 +190,14 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.7.2"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.7.2 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.7.2"
+                    }
+                }
             }
         }
     }
@@ -514,7 +522,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Aktivitetsrapport"
         "ProductCode" = "8:{3B618356-428E-4D03-926B-03D00ECA0C1A}"
-        "PackageCode" = "8:{256E54CE-0198-41ED-B72A-16FBC455E1A2}"
+        "PackageCode" = "8:{66EEE53A-BF5F-4E95-B57C-5E3777A8BBC4}"
         "UpgradeCode" = "8:{955A41F2-ED1F-4E7A-B957-531594266799}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"

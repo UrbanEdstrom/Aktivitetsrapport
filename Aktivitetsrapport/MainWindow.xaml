@@ -47,8 +47,8 @@
         <TextBox x:Name="txt_path" VerticalContentAlignment="Center" Margin="10,5,10,5" FontSize="14" Grid.ColumnSpan="3" Grid.Row="2" />
         <Button x:Name="btn_path" Style="{DynamicResource RoundButton}" FontSize="14" Content="Bläddra" Click="btn_path_Click" Margin="10,5,5,5" Grid.Row="1"/>
         <Rectangle Grid.Column="3" Grid.RowSpan="6" Fill="#FF31597B"/>
-        <ScrollViewer HorizontalScrollBarVisibility="Auto" Grid.Column="3" Grid.Row="1" Grid.RowSpan="5" >
-            <Border HorizontalAlignment="Center" Margin="10,5,10,10" BorderBrush="Black" VerticalAlignment="Top" BorderThickness="0.1" >
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"  Grid.Column="3" Grid.Row="1" Grid.RowSpan="5" >
+            <Border HorizontalAlignment="Center" Margin="10,5,10,10" BorderBrush="Black" VerticalAlignment="Center" BorderThickness="0.1" >
                 <Border.Effect>
                     <DropShadowEffect/>
                 </Border.Effect>
