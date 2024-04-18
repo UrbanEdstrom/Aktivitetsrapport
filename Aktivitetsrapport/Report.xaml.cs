@@ -157,7 +157,7 @@ namespace Aktivitetsrapport
 
 
             // Add data for stacked bar chart
-            _weekStackedBarChartData = new SeriesCollection
+            WeekStackedBarChartData = new SeriesCollection
             {
 
                 new StackedColumnSeries
@@ -295,7 +295,7 @@ namespace Aktivitetsrapport
                     _dayStackedBarChartLabels[i] = time.ToString("hh");
                 }
 
-                dayblock.X_axislabels.Labels = DayStackedBarChartLabels;
+                dayblock.X_axislabels.Labels = _dayStackedBarChartLabels;
                 dayblock.StackedBarChartAxisY.LabelFormatter = AbsFormatter;
 
                 //Init piechart 
@@ -341,7 +341,7 @@ namespace Aktivitetsrapport
                 dayblock.txt_steps.Text = String.Format("{0:0}", sumsteps);
 
 
-                dayblock.pieChart.Series = PieChartData[daynum];
+                dayblock.pieChart.Series = _pieChartData[daynum];
 
                 dayblock.txt_day.Text = weekdaylist[daynum];
 
