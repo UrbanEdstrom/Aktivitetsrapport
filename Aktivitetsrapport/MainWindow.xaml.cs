@@ -79,7 +79,7 @@ namespace Aktivitetsrapport
         private int[] standActs = null;
         private int[] sleepActs = null;
 
-        private string matpath = null;
+        private string matpath = Environment.SpecialFolder.ApplicationData.ToString();
        
         public MainWindow()
         {
@@ -100,7 +100,7 @@ namespace Aktivitetsrapport
 
             if (args.Count() > 1 ) 
             {
-                callCLI(args[1]);
+                Launch_File(args[1]);
             }
 
         }
@@ -211,20 +211,8 @@ namespace Aktivitetsrapport
                         return;
                     }
 
-                    filename = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
-
-                    string ext = System.IO.Path.GetExtension(dialog.FileName);
-
-                    if (ext.Equals(".cwa"))
-                    {
-                        callCLI(dialog.FileName);
-                    }
-                    if (ext.Equals(".mat"))
-                    {
-                        open_mat_file(dialog.FileName);  
-                    }
+                    Launch_File(dialog.FileName);
                     
-
                 }
             }
             catch (Exception ex)
@@ -287,7 +275,7 @@ namespace Aktivitetsrapport
         {
 
             Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
-            dlg.FileName = "Rapport"; // Default file name
+            dlg.FileName = filename; // Default file name
             dlg.DefaultExt = ".png"; // Default file extension
             dlg.Filter = "PNG bilder (.png)|*.png"; // Filter files by extension
 
@@ -322,7 +310,6 @@ namespace Aktivitetsrapport
 
         private void ReadSettings()
         {
-            this.matpath = Properties.Settings.Default.MatPath;
             
             this.walkActs = Properties.Settings.Default.Walk.Split(',').Select(s => Int32.Parse(s)).ToArray();
             this.sitlieActs = Properties.Settings.Default.SitLie.Split(',').Select(s => Int32.Parse(s)).ToArray();
@@ -333,7 +320,6 @@ namespace Aktivitetsrapport
 
         private void SaveSettings()
         {
-            Properties.Settings.Default.MatPath = this.matpath;
             Properties.Settings.Default.Save();
         }
 
@@ -378,7 +364,7 @@ namespace Aktivitetsrapport
             {
                         
                 Process cmd = new Process();
-                cmd.StartInfo.FileName = "actipass _cli.exe";                    
+                cmd.StartInfo.FileName = "actipass_cli.exe";                    
                 cmd.StartInfo.Arguments = "\"" + cwafile + "\"" + " out " + "\"" + matFile + "\"";                
                 cmd.StartInfo.RedirectStandardInput = true;
                 cmd.StartInfo.RedirectStandardOutput = true;
@@ -410,7 +396,8 @@ namespace Aktivitetsrapport
             {
                 open_mat_file(matFile);
             });
-            
+
+            AnalysProgress = 0;
 
         }
                 
@@ -475,29 +462,36 @@ namespace Aktivitetsrapport
         private void Window_Drop(object sender, System.Windows.DragEventArgs e)
         {
             string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
-            foreach (string file in files)
+            foreach (string file in files)  //Not tested with multiple files
             {
-                AnalysProgress = 0;
-                
-                string ext = System.IO.Path.GetExtension(file);
-
-                filename = System.IO.Path.GetFileNameWithoutExtension(file);
-
-                if (ext.Equals(".cwa"))
-                {
-                    callCLI(file);
-                }
-                if (ext.Equals(".mat")) 
-                {
-                    this.Dispatcher.Invoke(() =>
-                    {
-                        open_mat_file(file);
-                    });
-                } 
-
+                Launch_File(file);
             }
 
         }
+
+        private void Launch_File(string aktfile)
+        {
+            AnalysProgress = 0;
+
+            string ext = System.IO.Path.GetExtension(aktfile).ToLower();
+
+            filename = System.IO.Path.GetFileNameWithoutExtension(aktfile);
+
+            if (ext.Equals(".cwa"))
+            {
+                callCLI(aktfile);
+            }
+            if (ext.Equals(".mat"))
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    open_mat_file(aktfile);
+                });
+            }
+
+
+        }
+
     }
 
 }
