@@ -1,7 +1,7 @@
 # Aktivitetsrapport
 Rapportgenerator för rörelseanalysprogrammet ActiPASS. Programmet skapar en rapport på en A4-sida utifrån de data som samlats in med rörelsesensorer, tex Axivity.
 
-[Här](https://github.com/UrbanEdstrom/Aktivitetsrapport/raw/master/Installation/AktivitetsrapportSetup.zip) finns ett installationspaket. Installationen kräver admin-rättigheter.
+[Här](https://github.com/UrbanEdstrom/Aktivitetsrapport/raw/master/Installation/Aktivitetsrapport_Setup.zip) finns ett installationspaket. Installationen kräver admin-rättigheter.
 
 ### Inkluderade mjukvarubibliotek
 LiveCharts 0.9.7<br>
