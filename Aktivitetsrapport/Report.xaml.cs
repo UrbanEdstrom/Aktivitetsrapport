@@ -21,6 +21,8 @@ using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using System.Globalization;
 using LiveCharts.Helpers;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Aktivitetsrapport
 {
@@ -53,8 +55,41 @@ namespace Aktivitetsrapport
 
         }
 
+        public void Clear()
+        { 
+            foreach (SeriesCollection Series in PieChartData) {
+                if (Series!=null) Series.Clear();
+            }
+            foreach (SeriesCollection Series in DayStackedBarChartData)
+            { 
+                if(Series!=null) Series.Clear();
+            }
+            WeekStackedBarChartData.Clear();
 
-        public void Init(List<MainWindow.Hour> newlist, int[] walkacts, int[] sitlieacts, int[] standacts, int[] sleepacts)
+            StackPanel_Days.Children.Clear();
+
+            nameTextBlock.Text = "";
+            periodTextBlock.Text = "";
+
+            txt_daymeanstep.Text = "";
+            txt_daymeanwalk.Text = "";
+            txt_daymeanstand.Text = "";
+            txt_daymeanlie.Text = "";
+            txt_daymeansleep.Text = "";
+            txt_workmeanstep.Text = "";
+            txt_workmeanwalk.Text = "";
+            txt_workmeanstand.Text = "";
+            txt_workmeanlie.Text = "";
+            txt_workmeansleep.Text = "";
+            txt_weekendmeanstep.Text = "";
+            txt_weekendmeanwalk.Text = "";
+            txt_weekendmeanstand.Text = "";
+            txt_weekendmeanlie.Text = "";
+            txt_weekendmeansleep.Text = "";
+
+        }
+
+        public void Init(List<MainWindow.Hour> newlist, int[] walkacts, int[] sitlieacts, int[] standacts, int[] sleepacts, string filename)
         {
 
             List<string> weekdays = new List<string>();
@@ -141,7 +176,7 @@ namespace Aktivitetsrapport
                 weekSteps.Add(daySteps[i].Sum());
             }
 
-            nameTextBlock.Text = "";
+            nameTextBlock.Text = filename;
             periodTextBlock.Text = swedish.DateTimeFormat.DayNames[(int)newlist[0].Date.DayOfWeek] + " " + newlist[0].Date.ToShortDateString() + " - " + swedish.DateTimeFormat.DayNames[(int)newlist[newlist.Count - 1].Date.DayOfWeek] + " " + newlist[newlist.Count - 1].Date.ToShortDateString();
 
 

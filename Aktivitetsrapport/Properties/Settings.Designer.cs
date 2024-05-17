@@ -25,25 +25,13 @@ namespace Aktivitetsrapport.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Environment.SpecialFolder.MyDocuments + \"\\\\Aktivitetsrapport\\\\work\"")]
         public string MatPath {
             get {
                 return ((string)(this["MatPath"]));
             }
             set {
                 this["MatPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string CLI_Command {
-            get {
-                return ((string)(this["CLI_Command"]));
-            }
-            set {
-                this["CLI_Command"] = value;
             }
         }
         

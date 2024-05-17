@@ -20,14 +20,21 @@ using MatFileHandler;
 
 using System.Windows.Forms;
 using System.Diagnostics;
-
+using System.Windows.Threading;
+using System.Reflection.Emit;
+using System.Threading;
+using System.ComponentModel;
+using System.Reflection;
+using static System.Windows.Forms.LinkLabel;
+using static System.Net.Mime.MediaTypeNames;
+using Image = System.Windows.Controls.Image;
 
 namespace Aktivitetsrapport
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
 
         public class Hour
@@ -73,28 +80,10 @@ namespace Aktivitetsrapport
         private int[] sleepActs = null;
 
         private string matpath = null;
-        private string cli_command = null;
-
+       
         public MainWindow()
         {
             InitializeComponent();
-
-            btn_path.ToolTip = "Leta efter matlab-filen (.mat) som genereras av Actipass och skapa rapporten";
-            btn_print.ToolTip = "Skriv ut rapporten till valfri skrivare eller spara som pdf med 'Microsoft Print to PDF'";
-            btn_save.ToolTip = "Spara rapporten som png-fil";
-            btn_cli.ToolTip = "Kör Actipass vilket genererar matlab filen som sedan hittas med bläddra knappen";
-
-            txt_info.Text = "1. Aktivitetsrapport behöver en fil med aktiviteter från ActiPASS. Filen skapas automatiskt när ActiPASS körs. " +
-                            "Detta kan göras genom att köra ActiPASS på vanligt sätt eller genom att skriva in ett kommando härifrån.\n" +
-                            "\n" + 
-                            "2. För att skapa rapporten öppnas aktuell sensors matlab-fil (.mat) med aktiviteter. " +
-                            "Filen finns i arbetskatalogen som ActiPASS använder och sökvägen är:\n" +
-                            "arbetskatalog\\IndividualOut\\sensornr\\sensornr - Activity_per_s.mat\n" +
-                            "\n" +
-                            "3. När filen valts ut med bläddra knappen kommer rapporten att skapas.\n" +
-                            "\n" +
-                            "4. Rapporten kan skrivas ut eller sparas till png-fil.";
-
 
             try
             {
@@ -105,16 +94,26 @@ namespace Aktivitetsrapport
                 System.Windows.MessageBox.Show(ex.Message);
             }
 
+            DataContext = this;
+
+            string[] args = Environment.GetCommandLineArgs();
+
+            if (args.Count() > 1 ) 
+            {
+                callCLI(args[1]);
+            }
+
         }
 
 
-        private void open_mat_file()
+        private void open_mat_file(string matpath)
         {
+            
             try
             {
-                List<Hour> newhourlist = read_mat(txt_path.Text);
+                List<Hour> newhourlist = read_mat(matpath);
 
-                ax_report.Init(newhourlist, walkActs, sitlieActs, standActs, sleepActs);
+                ax_report.Init(newhourlist, walkActs, sitlieActs, standActs, sleepActs,filename);
 
             }
             catch (Exception ex)
@@ -136,9 +135,7 @@ namespace Aktivitetsrapport
 
                 IMatFile matFile = reader.Read();
 
-                IVariable variable = matFile["aktTbl"];
-
-                var matObject = matFile["aktTbl"].Value as IMatObject;
+                var matObject = matFile.Variables[0].Value as IMatObject;
 
                 TableAdapter ta = new TableAdapter(matObject);
 
@@ -206,23 +203,27 @@ namespace Aktivitetsrapport
                     dialog.Title = "Välj mat-fil från Actipass";
                     //dialog.FileName = matpath;
                     dialog.DefaultExt = "mat";
-                    dialog.Filter = "Matlab datafiler (*.mat)|*.mat|Alla filer (*.*)|*.*";
-
+                    dialog.Filter = "Aktivitetsfiler (*.mat;*.cwa)|*.mat;*.cwa|Alla filer (*.*)|*.*";
 
                     DialogResult result = dialog.ShowDialog();
-                    if (result == System.Windows.Forms.DialogResult.OK)
-                    {
-                        txt_path.Text = dialog.FileName;
-                    }
-                    else
+                    if (result == System.Windows.Forms.DialogResult.Cancel)
                     {
                         return;
                     }
-                    
-                    Properties.Settings.Default.MatPath = dialog.FileName;
-                    Properties.Settings.Default.Save();
 
-                    open_mat_file();
+                    filename = System.IO.Path.GetFileNameWithoutExtension(dialog.FileName);
+
+                    string ext = System.IO.Path.GetExtension(dialog.FileName);
+
+                    if (ext.Equals(".cwa"))
+                    {
+                        callCLI(dialog.FileName);
+                    }
+                    if (ext.Equals(".mat"))
+                    {
+                        open_mat_file(dialog.FileName);  
+                    }
+                    
 
                 }
             }
@@ -259,7 +260,7 @@ namespace Aktivitetsrapport
 
                 bitmap.Render(ax_report);
 
-                Image reportimage = new Image();
+                System.Windows.Controls.Image reportimage = new System.Windows.Controls.Image();
 
                 reportimage.Source = bitmap;
 
@@ -322,11 +323,7 @@ namespace Aktivitetsrapport
         private void ReadSettings()
         {
             this.matpath = Properties.Settings.Default.MatPath;
-            this.cli_command = Properties.Settings.Default.CLI_Command;
-
-            txt_cli.Text = cli_command;
-            txt_path.Text = matpath;
-
+            
             this.walkActs = Properties.Settings.Default.Walk.Split(',').Select(s => Int32.Parse(s)).ToArray();
             this.sitlieActs = Properties.Settings.Default.SitLie.Split(',').Select(s => Int32.Parse(s)).ToArray();
             this.standActs = Properties.Settings.Default.Stand.Split(',').Select(s => Int32.Parse(s)).ToArray();
@@ -336,8 +333,7 @@ namespace Aktivitetsrapport
 
         private void SaveSettings()
         {
-            Properties.Settings.Default.MatPath = txt_path.Text;
-            Properties.Settings.Default.CLI_Command = txt_cli.Text;
+            Properties.Settings.Default.MatPath = this.matpath;
             Properties.Settings.Default.Save();
         }
 
@@ -365,34 +361,66 @@ namespace Aktivitetsrapport
             }
         }
 
-        private void btn_cli_Click(object sender, RoutedEventArgs e)
+        private void callCLI(string cwafile)
         {
+
+            string workpath = matpath + "\\Aktivitetsrapport";
+
+            if (!Directory.Exists(workpath)) Directory.CreateDirectory(workpath);
+
+            string matFile = workpath + "\\" + filename +".mat";
+
+            ax_report.Clear();
+
+            TxtOut = "Startar analys...\n";
 
             try
             {
-                if (!txt_cli.Text.Equals(""))
-                {
-                    Process cmd = new Process();
-                    cmd.StartInfo.FileName = "cmd.exe";
-                    cmd.StartInfo.RedirectStandardInput = true;
-                    cmd.StartInfo.RedirectStandardOutput = true;
-                    cmd.StartInfo.CreateNoWindow = false;
-                    cmd.StartInfo.UseShellExecute = false;
-                    cmd.Start();
+                        
+                Process cmd = new Process();
+                cmd.StartInfo.FileName = "actipass _cli.exe";                    
+                cmd.StartInfo.Arguments = "\"" + cwafile + "\"" + " out " + "\"" + matFile + "\"";                
+                cmd.StartInfo.RedirectStandardInput = true;
+                cmd.StartInfo.RedirectStandardOutput = true;
+                cmd.StartInfo.CreateNoWindow = true;
+                cmd.StartInfo.UseShellExecute = false;
+                cmd.EnableRaisingEvents = true;
+                cmd.OutputDataReceived += Cmd_OutputDataReceived;
+                cmd.Exited += Cmd_Exited;
+                cmd.Start();
+                cmd.BeginOutputReadLine();
 
-                    cmd.StandardInput.WriteLine(txt_cli.Text);
-                    cmd.StandardInput.Flush();
-                    cmd.StandardInput.Close();
-                    
-                    cmd.WaitForExit();
-                    //Console.WriteLine(cmd.StandardOutput.ReadToEnd());
-                    cmd.Close();
-                }
             }
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(ex.Message);
+                if (ex.Message.Equals("Det går inte att hitta filen")) {
+                    TxtOut += "För att öppna en cwa-fil direkt behöver ActiPASS_CLI vara installerat och tillagt i Windows PATH";
+                }
             }
+        }
+
+        private void Cmd_Exited(object sender, EventArgs e)
+        {
+            string workpath = matpath + "\\Aktivitetsrapport";
+
+            string matFile = workpath + "\\" + filename + ".mat";
+
+            this.Dispatcher.Invoke(() =>
+            {
+                open_mat_file(matFile);
+            });
+            
+
+        }
+                
+        private void Cmd_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            Process cmd = sender as Process;
+            string line = e.Data + "\n";
+
+            TxtOut += line;
+            AnalysProgress++;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -405,6 +433,70 @@ namespace Aktivitetsrapport
             {
                 System.Windows.MessageBox.Show(ex.Message);
             }
+        }
+
+        private string txtOut = "";
+
+        public string TxtOut
+        {
+            get => txtOut;
+
+            set
+            {
+                txtOut = value;
+                NotifyPropertyChanged(nameof(TxtOut));
+            }
+        }
+
+        private int analysProgress;
+
+        public int AnalysProgress
+        {
+            get { return analysProgress; }
+            set 
+            { 
+                analysProgress = value;
+                NotifyPropertyChanged(nameof(AnalysProgress));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void NotifyPropertyChanged(string propertyName)
+        {
+            if (propertyName != null)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+
+        string filename = null;
+
+        private void Window_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
+            foreach (string file in files)
+            {
+                AnalysProgress = 0;
+                
+                string ext = System.IO.Path.GetExtension(file);
+
+                filename = System.IO.Path.GetFileNameWithoutExtension(file);
+
+                if (ext.Equals(".cwa"))
+                {
+                    callCLI(file);
+                }
+                if (ext.Equals(".mat")) 
+                {
+                    this.Dispatcher.Invoke(() =>
+                    {
+                        open_mat_file(file);
+                    });
+                } 
+
+            }
+
         }
     }
 

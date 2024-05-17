@@ -3,10 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="MatPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="CLI_Command" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Environment.SpecialFolder.MyDocuments + "\\Aktivitetsrapport\\work"</Value>
     </Setting>
     <Setting Name="Sleep" Type="System.String" Scope="User">
       <Value Profile="(Default)">10</Value>
