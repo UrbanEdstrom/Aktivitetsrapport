@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              Background="White"
              
-             Height="2.8 cm" Width="19 cm">
+             Height="3 cm" Width="19 cm">
 
     <UserControl.Resources>
         <!-- Define a color resource -->

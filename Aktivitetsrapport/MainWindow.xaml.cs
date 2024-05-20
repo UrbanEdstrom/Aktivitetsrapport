@@ -80,7 +80,7 @@ namespace Aktivitetsrapport
         private int[] sleepActs = null;
 
         private string docpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
+               
         public MainWindow()
         {
             InitializeComponent();
@@ -316,6 +316,8 @@ namespace Aktivitetsrapport
             this.standActs = Properties.Settings.Default.Stand.Split(',').Select(s => Int32.Parse(s)).ToArray();
             this.sleepActs = Properties.Settings.Default.Sleep.Split(',').Select(s => Int32.Parse(s)).ToArray();
 
+            this.progress_analys.Maximum = Int32.Parse(Properties.Settings.Default.CLI_steps);
+
         }
 
         private void SaveSettings()
@@ -364,8 +366,8 @@ namespace Aktivitetsrapport
             {
                         
                 Process cmd = new Process();
-                cmd.StartInfo.FileName = "actipass_cli.exe";                    
-                cmd.StartInfo.Arguments = "\"" + cwafile + "\"" + " out " + "\"" + matFile + "\"";                
+                cmd.StartInfo.FileName = "actipass_cli.exe";
+                cmd.StartInfo.Arguments = "\"" + cwafile + "\"" + " out " + "\"" + matFile + "\""; //+ " daily " + "\"no\"";                
                 cmd.StartInfo.RedirectStandardInput = true;
                 cmd.StartInfo.RedirectStandardOutput = true;
                 cmd.StartInfo.CreateNoWindow = true;

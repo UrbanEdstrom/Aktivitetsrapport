@@ -70,5 +70,17 @@ namespace Aktivitetsrapport.Properties {
                 this["Walk"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("34")]
+        public string CLI_steps {
+            get {
+                return ((string)(this["CLI_steps"]));
+            }
+            set {
+                this["CLI_steps"] = value;
+            }
+        }
     }
 }
