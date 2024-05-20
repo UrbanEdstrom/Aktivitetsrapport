@@ -79,8 +79,8 @@ namespace Aktivitetsrapport
         private int[] standActs = null;
         private int[] sleepActs = null;
 
-        private string matpath = Environment.SpecialFolder.ApplicationData.ToString();
-       
+        private string docpath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
         public MainWindow()
         {
             InitializeComponent();
@@ -350,11 +350,11 @@ namespace Aktivitetsrapport
         private void callCLI(string cwafile)
         {
 
-            string workpath = matpath + "\\Aktivitetsrapport";
+            string workpath = System.IO.Path.Combine(docpath,"Aktivitetsrapport");
 
-            if (!Directory.Exists(workpath)) Directory.CreateDirectory(workpath);
+            Directory.CreateDirectory(workpath);
 
-            string matFile = workpath + "\\" + filename +".mat";
+            string matFile = System.IO.Path.Combine(workpath,filename+".mat");
 
             ax_report.Clear();
 
@@ -388,16 +388,8 @@ namespace Aktivitetsrapport
 
         private void Cmd_Exited(object sender, EventArgs e)
         {
-            string workpath = matpath + "\\Aktivitetsrapport";
 
-            string matFile = workpath + "\\" + filename + ".mat";
-
-            this.Dispatcher.Invoke(() =>
-            {
-                open_mat_file(matFile);
-            });
-
-            AnalysProgress = 0;
+            Launch_File(System.IO.Path.Combine(docpath , "Aktivitetsrapport", filename + ".mat"));
 
         }
                 
