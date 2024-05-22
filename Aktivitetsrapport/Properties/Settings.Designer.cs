@@ -37,7 +37,7 @@ namespace Aktivitetsrapport.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0,1,2,9,11")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1,2,11")]
         public string SitLie {
             get {
                 return ((string)(this["SitLie"]));

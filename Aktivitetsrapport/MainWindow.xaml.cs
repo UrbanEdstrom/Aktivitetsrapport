@@ -315,7 +315,6 @@ namespace Aktivitetsrapport
             this.sitlieActs = Properties.Settings.Default.SitLie.Split(',').Select(s => Int32.Parse(s)).ToArray();
             this.standActs = Properties.Settings.Default.Stand.Split(',').Select(s => Int32.Parse(s)).ToArray();
             this.sleepActs = Properties.Settings.Default.Sleep.Split(',').Select(s => Int32.Parse(s)).ToArray();
-
             this.progress_analys.Maximum = Int32.Parse(Properties.Settings.Default.CLI_steps);
 
         }
