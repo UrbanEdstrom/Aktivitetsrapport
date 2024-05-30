@@ -2,19 +2,19 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Aktivitetsrapport.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Sleep" Type="System.String" Scope="User">
+    <Setting Name="Sömn" Type="System.String" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
-    <Setting Name="SitLie" Type="System.String" Scope="User">
+    <Setting Name="SittLigg" Type="System.String" Scope="User">
       <Value Profile="(Default)">1,2,11</Value>
     </Setting>
-    <Setting Name="Stand" Type="System.String" Scope="User">
+    <Setting Name="Stående" Type="System.String" Scope="User">
       <Value Profile="(Default)">3</Value>
     </Setting>
-    <Setting Name="Walk" Type="System.String" Scope="User">
+    <Setting Name="Rörelse" Type="System.String" Scope="User">
       <Value Profile="(Default)">4,5,6,7,8</Value>
     </Setting>
-    <Setting Name="CLI_steps" Type="System.String" Scope="User">
+    <Setting Name="CLI_steg" Type="System.String" Scope="User">
       <Value Profile="(Default)">34</Value>
     </Setting>
   </Settings>

@@ -26,60 +26,60 @@ namespace Aktivitetsrapport.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public string Sleep {
+        public string Sömn {
             get {
-                return ((string)(this["Sleep"]));
+                return ((string)(this["Sömn"]));
             }
             set {
-                this["Sleep"] = value;
+                this["Sömn"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1,2,11")]
-        public string SitLie {
+        public string SittLigg {
             get {
-                return ((string)(this["SitLie"]));
+                return ((string)(this["SittLigg"]));
             }
             set {
-                this["SitLie"] = value;
+                this["SittLigg"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
-        public string Stand {
+        public string Stående {
             get {
-                return ((string)(this["Stand"]));
+                return ((string)(this["Stående"]));
             }
             set {
-                this["Stand"] = value;
+                this["Stående"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("4,5,6,7,8")]
-        public string Walk {
+        public string Rörelse {
             get {
-                return ((string)(this["Walk"]));
+                return ((string)(this["Rörelse"]));
             }
             set {
-                this["Walk"] = value;
+                this["Rörelse"] = value;
             }
         }
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("34")]
-        public string CLI_steps {
+        public string CLI_steg {
             get {
-                return ((string)(this["CLI_steps"]));
+                return ((string)(this["CLI_steg"]));
             }
             set {
-                this["CLI_steps"] = value;
+                this["CLI_steg"] = value;
             }
         }
     }

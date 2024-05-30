@@ -468,6 +468,29 @@
         }
         "FileType"
         {
+            "{5EB83D71-FA18-4901-BE56-DE22E13CC478}:_557C07F36DB640A29CB5404FF6631E87"
+            {
+            "Name" = "8:Axivity data file"
+            "Description" = "8:"
+            "Extensions" = "8:cwa"
+            "MIME" = "8:"
+            "Icon" = "8:_CEDCDDAB8F3B485781129F5459C2B7E3"
+            "IconIndex" = "3:0"
+                "Command"
+                {
+                "Command" = "8:_952F7C04F5984D01B06EF6BF1D60245F"
+                }
+                "Verbs"
+                {
+                    "{95C0C507-CBF0-42B8-B119-07219E384A4A}:_4337F8E363DB45E1B564F2F2EEDC07FF"
+                    {
+                    "Command" = "8:&Open"
+                    "Verb" = "8:open"
+                    "Arguments" = "8:\"%1\""
+                    "Order" = "3:0"
+                    }
+                }
+            }
         }
         "Folder"
         {
@@ -533,7 +556,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Aktivitetsrapport"
         "ProductCode" = "8:{3B618356-428E-4D03-926B-03D00ECA0C1A}"
-        "PackageCode" = "8:{CE5645E5-1ADC-4708-A8BB-9700863166BB}"
+        "PackageCode" = "8:{B281421A-A5C8-469C-B0EC-C73A706D3423}"
         "UpgradeCode" = "8:{955A41F2-ED1F-4E7A-B957-531594266799}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -556,7 +579,7 @@
         "UseSystemSearchPath" = "11:TRUE"
         "TargetPlatform" = "3:0"
         "PreBuildEvent" = "8:"
-        "PostBuildEvent" = "8:"
+        "PostBuildEvent" = "8:copy /Y \"$(ProjectDir)\\$(Configuration)\\*.*\" \"$(ProjectDir)\\..\\Installation\\\"\r\n\r\n"
         "RunPostBuildEvent" = "3:0"
         }
         "Registry"

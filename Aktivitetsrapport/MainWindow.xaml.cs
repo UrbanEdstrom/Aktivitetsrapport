@@ -200,8 +200,7 @@ namespace Aktivitetsrapport
                 //Open folder chooser
                 using (var dialog = new System.Windows.Forms.OpenFileDialog())
                 {
-                    dialog.Title = "Välj mat-fil från Actipass";
-                    //dialog.FileName = matpath;
+                    dialog.Title = "Välj aktivitetsfil";
                     dialog.DefaultExt = "mat";
                     dialog.Filter = "Aktivitetsfiler (*.mat;*.cwa)|*.mat;*.cwa|Alla filer (*.*)|*.*";
 
@@ -311,11 +310,11 @@ namespace Aktivitetsrapport
         private void ReadSettings()
         {
             
-            this.walkActs = Properties.Settings.Default.Walk.Split(',').Select(s => Int32.Parse(s)).ToArray();
-            this.sitlieActs = Properties.Settings.Default.SitLie.Split(',').Select(s => Int32.Parse(s)).ToArray();
-            this.standActs = Properties.Settings.Default.Stand.Split(',').Select(s => Int32.Parse(s)).ToArray();
-            this.sleepActs = Properties.Settings.Default.Sleep.Split(',').Select(s => Int32.Parse(s)).ToArray();
-            this.progress_analys.Maximum = Int32.Parse(Properties.Settings.Default.CLI_steps);
+            this.walkActs = Properties.Settings.Default.Rörelse.Split(',').Select(s => Int32.Parse(s)).ToArray();
+            this.sitlieActs = Properties.Settings.Default.SittLigg.Split(',').Select(s => Int32.Parse(s)).ToArray();
+            this.standActs = Properties.Settings.Default.Stående.Split(',').Select(s => Int32.Parse(s)).ToArray();
+            this.sleepActs = Properties.Settings.Default.Sömn.Split(',').Select(s => Int32.Parse(s)).ToArray();
+            this.progress_analys.Maximum = Int32.Parse(Properties.Settings.Default.CLI_steg);
 
         }
 

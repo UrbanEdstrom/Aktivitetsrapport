@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,9 +50,10 @@ namespace Aktivitetsrapport
 
             }
 
-
             datagrid_settings.AutoGenerateColumns = true;
             datagrid_settings.ItemsSource = listan;
+
+           
 
         }
 
@@ -90,7 +92,9 @@ namespace Aktivitetsrapport
 
             datagrid_settings.Columns[0].IsReadOnly = true;
 
+            datagrid_settings.Items.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
         }
+
     }
 }
