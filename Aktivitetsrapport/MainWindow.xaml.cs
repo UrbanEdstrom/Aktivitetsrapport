@@ -312,8 +312,8 @@ namespace Aktivitetsrapport
             
             this.walkActs = Properties.Settings.Default.Rörelse.Split(',').Select(s => Int32.Parse(s)).ToArray();
             this.sitlieActs = Properties.Settings.Default.SittLigg.Split(',').Select(s => Int32.Parse(s)).ToArray();
-            this.standActs = Properties.Settings.Default.Stående.Split(',').Select(s => Int32.Parse(s)).ToArray();
-            this.sleepActs = Properties.Settings.Default.Sömn.Split(',').Select(s => Int32.Parse(s)).ToArray();
+            this.standActs = Properties.Settings.Default.Stå.Split(',').Select(s => Int32.Parse(s)).ToArray();
+            this.sleepActs = Properties.Settings.Default.Sova.Split(',').Select(s => Int32.Parse(s)).ToArray();
             this.progress_analys.Maximum = Int32.Parse(Properties.Settings.Default.CLI_steg);
 
         }

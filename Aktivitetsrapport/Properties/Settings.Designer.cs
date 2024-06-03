@@ -26,12 +26,12 @@ namespace Aktivitetsrapport.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public string Sömn {
+        public string Sova {
             get {
-                return ((string)(this["Sömn"]));
+                return ((string)(this["Sova"]));
             }
             set {
-                this["Sömn"] = value;
+                this["Sova"] = value;
             }
         }
         
@@ -50,12 +50,12 @@ namespace Aktivitetsrapport.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
-        public string Stående {
+        public string Stå {
             get {
-                return ((string)(this["Stående"]));
+                return ((string)(this["Stå"]));
             }
             set {
-                this["Stående"] = value;
+                this["Stå"] = value;
             }
         }
         

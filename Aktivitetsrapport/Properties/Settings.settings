@@ -2,13 +2,13 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Aktivitetsrapport.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Sömn" Type="System.String" Scope="User">
+    <Setting Name="Sova" Type="System.String" Scope="User">
       <Value Profile="(Default)">10</Value>
     </Setting>
     <Setting Name="SittLigg" Type="System.String" Scope="User">
       <Value Profile="(Default)">1,2,11</Value>
     </Setting>
-    <Setting Name="Stående" Type="System.String" Scope="User">
+    <Setting Name="Stå" Type="System.String" Scope="User">
       <Value Profile="(Default)">3</Value>
     </Setting>
     <Setting Name="Rörelse" Type="System.String" Scope="User">

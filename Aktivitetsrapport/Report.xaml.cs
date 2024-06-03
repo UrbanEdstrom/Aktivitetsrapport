@@ -197,13 +197,13 @@ namespace Aktivitetsrapport
 
                 new StackedColumnSeries
                 {
-                    Title = "Gående",
+                    Title = "Rörelse",
                     Values = walk,
                     DataLabels = false
                 },
                 new StackedColumnSeries
                 {
-                    Title = "Stående",
+                    Title = "Stå",
                     Values = stand,
                     DataLabels = false
                 },
@@ -294,13 +294,13 @@ namespace Aktivitetsrapport
 
                     new StackedColumnSeries
                     {
-                        Title = "Gående",
+                        Title = "Rörelse",
                         Values = Walk[daynum],
                         DataLabels = false,
                     },
                     new StackedColumnSeries
                     {
-                        Title = "Stående",
+                        Title = "Stå",
                         Values = Stand[daynum],
                         DataLabels = false,
                     },
@@ -343,7 +343,7 @@ namespace Aktivitetsrapport
                 {
                     new PieSeries
                     {
-                        Title = "Gå",
+                        Title = "Rörelse",
                         Values = new ChartValues<double> {sumwalk},
                         DataLabels = false
                     },
