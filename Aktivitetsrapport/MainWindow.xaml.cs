@@ -87,6 +87,8 @@ namespace Aktivitetsrapport
         {
             InitializeComponent();
 
+            this.Title = "Aktivitetsrapport v" + Assembly.GetExecutingAssembly().GetName().Version.Major.ToString() + "." + Assembly.GetExecutingAssembly().GetName().Version.Minor.ToString();
+
             try
             {
                 ReadSettings();
