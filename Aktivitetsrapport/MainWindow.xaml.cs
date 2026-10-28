@@ -1,32 +1,34 @@
-﻿using System;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
+using MatFileHandler;
+using System;
 using System.CodeDom;
+using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using MatFileHandler;
-
-using System.Windows.Forms;
-using System.Diagnostics;
 using System.Windows.Threading;
-using System.Reflection.Emit;
-using System.Threading;
-using System.ComponentModel;
-using System.Reflection;
-using static System.Windows.Forms.LinkLabel;
 using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.LinkLabel;
 using Image = System.Windows.Controls.Image;
 
 namespace Aktivitetsrapport
@@ -106,6 +108,115 @@ namespace Aktivitetsrapport
         }
 
 
+        private void open_csv_file(string csvpath)
+        {
+            try
+            {
+                List<Hour> newhourlist = read_csv(csvpath);
+                ax_report.Init(newhourlist, walkActs, sitlieActs, standActs, sleepActs, filename);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message);
+            }
+        }
+
+        private List<Hour> read_csv(string csvpath)
+        {
+            List<Hour> hourlist = new List<Hour>();
+
+            var config = new CsvConfiguration(CultureInfo.InvariantCulture)
+            {
+                Delimiter = ",",
+                HasHeaderRecord = true
+            };
+
+            using (var reader = new StreamReader(csvpath))
+            using (var csv = new CsvReader(reader, config))
+            {
+
+                List<double> datelist = new List<double>();
+                List<double> activitylist = new List<double>();
+                List<double> stepslist = new List<double>();
+
+                csv.Read();
+                csv.ReadHeader();
+                int fieldCount = csv.HeaderRecord?.Length ?? 0;
+
+                while (csv.Read())
+                {
+                    
+                    if (csv.TryGetField<double>(0, out double date))
+                    {
+                        datelist.Add(date);
+                    }
+                    if (csv.TryGetField<double>(1, out double activity))
+                    {
+                        activitylist.Add(activity);
+                    }
+                    if (csv.TryGetField<double>(2, out double step))
+                    {
+                        stepslist.Add(step);
+                    }
+
+                }
+
+
+                double[] d = datelist.ToArray();
+
+                double[] a = activitylist.ToArray();
+
+                double[] steps = stepslist.ToArray();
+
+
+                //Need to remove 1900 years
+                DateTime[] datetime = d.Select(p => DateTime.FromOADate(p).AddYears(-1900)).ToArray();
+
+                int[] allactivities = a.Select(p => (int)p).ToArray();
+
+                double[] houractivity = new double[12];
+
+                double asteps = 0;
+
+                int startitem = 0;
+
+
+                //Find first midnight and continue 
+                for (int i = 0; i < allactivities.Length; i++)
+                {
+                    if (datetime[i].Hour == 0)
+                    {
+                        startitem = i;
+                        break;
+                    }
+
+                }
+
+                int currenthour = datetime[startitem].Hour;
+
+                for (int i = startitem; i < allactivities.Length; i++)
+                {
+
+                    houractivity[allactivities[i]] += 1;
+
+                    asteps += steps[i];
+
+                    if (!datetime[i].Hour.Equals(currenthour))
+                    {
+                        //Add to last hour 
+                        hourlist.Add(new Hour(datetime[i].AddHours(-1), houractivity, asteps));
+                        houractivity = new double[12];
+                        asteps = 0;
+                        currenthour = datetime[i].Hour;
+                    }
+
+                }
+            }
+
+            return hourlist;
+        }
+
+
         private void open_mat_file(string matpath)
         {
             
@@ -135,6 +246,7 @@ namespace Aktivitetsrapport
 
                 IMatFile matFile = reader.Read();
 
+                
                 var matObject = matFile.Variables[0].Value as IMatObject;
 
                 TableAdapter ta = new TableAdapter(matObject);
@@ -201,8 +313,8 @@ namespace Aktivitetsrapport
                 using (var dialog = new System.Windows.Forms.OpenFileDialog())
                 {
                     dialog.Title = "Välj aktivitetsfil";
-                    dialog.DefaultExt = "mat";
-                    dialog.Filter = "Aktivitetsfiler (*.mat;*.cwa)|*.mat;*.cwa|Alla filer (*.*)|*.*";
+                    dialog.DefaultExt = "csv";
+                    dialog.Filter = "Aktivitetsfiler (*.csv;*.cwa)|*.csv;*.cwa|Alla filer (*.*)|*.*";
 
                     DialogResult result = dialog.ShowDialog();
                     if (result == System.Windows.Forms.DialogResult.Cancel)
@@ -354,7 +466,7 @@ namespace Aktivitetsrapport
 
             Directory.CreateDirectory(workpath);
 
-            string matFile = System.IO.Path.Combine(workpath,filename+".mat");
+            string workFile = System.IO.Path.Combine(workpath,filename+".csv"); //Was mat-file but changed to csv because can't read mat file anymore
 
             ax_report.Clear();
 
@@ -365,7 +477,7 @@ namespace Aktivitetsrapport
                         
                 Process cmd = new Process();
                 cmd.StartInfo.FileName = "actipass_cli.exe";
-                cmd.StartInfo.Arguments = "\"" + cwafile + "\"" + " out " + "\"" + matFile + "\""; //+ " daily " + "\"no\"";                
+                cmd.StartInfo.Arguments = "\"" + cwafile + "\"" + " out " + "\"" + workFile + "\""; //+ " daily " + "\"no\"";                
                 cmd.StartInfo.RedirectStandardInput = true;
                 cmd.StartInfo.RedirectStandardOutput = true;
                 cmd.StartInfo.CreateNoWindow = true;
@@ -389,7 +501,7 @@ namespace Aktivitetsrapport
         private void Cmd_Exited(object sender, EventArgs e)
         {
 
-            Launch_File(System.IO.Path.Combine(docpath , "Aktivitetsrapport", filename + ".mat"));
+            Launch_File(System.IO.Path.Combine(docpath , "Aktivitetsrapport", filename + ".csv"));
 
         }
                 
@@ -473,12 +585,23 @@ namespace Aktivitetsrapport
             {
                 callCLI(aktfile);
             }
-            if (ext.Equals(".mat"))
+            else if (ext.Equals(".mat"))
             {
                 this.Dispatcher.Invoke(() =>
                 {
                     open_mat_file(aktfile);
                 });
+            }
+            else if(ext.Equals(".csv"))
+            {
+                this.Dispatcher.Invoke(() =>
+                {
+                    open_csv_file(aktfile);
+                });
+            }
+            else
+            {
+                System.Windows.MessageBox.Show("Filtypen stöds inte");
             }
 
 
