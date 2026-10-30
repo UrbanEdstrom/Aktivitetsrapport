@@ -45,14 +45,33 @@
         </Grid.ColumnDefinitions>
         <Button x:Name="btn_path" Style="{DynamicResource RoundButton}" FontSize="14" Content="Öppna" Margin="10,10,5,5" Click="btn_path_Click"/>
         <Rectangle Grid.Column="3" Grid.RowSpan="5" Fill="#FF31597B"/>
-        <Viewbox Grid.Column="3" Grid.RowSpan="5" Margin="0,5,0,0" >
-            <Border HorizontalAlignment="Center" Margin="10,5,10,10" BorderBrush="Black" VerticalAlignment="Center" BorderThickness="0.1" >
-                <Border.Effect>
-                    <DropShadowEffect/>
-                </Border.Effect>
-                <Aktivitetsrapport:Report x:Name="ax_report" Margin="0,0,0,0" />
-            </Border>
-        </Viewbox>
+        <ScrollViewer x:Name="MyScrollViewer"
+                      Grid.Column="3" Grid.RowSpan="5" 
+                      HorizontalScrollBarVisibility="Auto" 
+                      VerticalScrollBarVisibility="Auto"
+                      MouseDown="MyScrollViewer_MouseDown"
+                      MouseMove="MyScrollViewer_MouseMove"
+                      MouseUp="MyScrollViewer_MouseUp"
+                      Cursor="Hand"
+                      
+                      >
+
+            <Viewbox Grid.Column="3" Grid.RowSpan="5" Margin="0,5,0,0" Stretch="Uniform" MouseWheel="Viewbox_MouseWheel" >
+                <Border HorizontalAlignment="Center" Margin="10,5,10,10" BorderBrush="Black" VerticalAlignment="Center" BorderThickness="0.1" >
+                    <Border.LayoutTransform>
+                        <TransformGroup>
+                            <!-- Denna transform ändrar zoom-nivån -->
+                            <ScaleTransform x:Name="GridScale" ScaleX="1" ScaleY="1"/>
+                        </TransformGroup>
+                    </Border.LayoutTransform>
+
+                    <Border.Effect>
+                        <DropShadowEffect/>
+                    </Border.Effect>
+                    <Aktivitetsrapport:Report x:Name="ax_report" Margin="0,0,0,0" />
+                </Border>
+            </Viewbox>
+        </ScrollViewer>
         <Button x:Name="btn_print" Style="{DynamicResource RoundButton}" FontSize="14"  Content="Skriv ut" Margin="5,10,5,5" Click="btn_print_Click" Grid.Column="1"/>
         <Button x:Name="btn_save" Style="{DynamicResource RoundButton}" FontSize="14"  Content="Spara bild" Margin="5,10,10,5" Click="btn_save_Click" Grid.Column="2" />
         <ScrollViewer Grid.Row="2" Grid.ColumnSpan="3" Grid.RowSpan="3" Grid.Column="0" Margin="10,5,10,10" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" >

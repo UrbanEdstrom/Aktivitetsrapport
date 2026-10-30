@@ -20,7 +20,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Forms;
+//using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -318,7 +318,7 @@ namespace Aktivitetsrapport
                     dialog.DefaultExt = "csv";
                     dialog.Filter = "Aktivitetsfiler (*.csv;*.cwa)|*.csv;*.cwa|Alla filer (*.*)|*.*";
 
-                    DialogResult result = dialog.ShowDialog();
+                    System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                     if (result == System.Windows.Forms.DialogResult.Cancel)
                     {
                         return;
@@ -608,7 +608,83 @@ namespace Aktivitetsrapport
 
 
         }
+        private const double ZoomSpeed = 0.1;
+        private const double MaxZoom = 10.0;
+        private const double MinZoom = 0.5;
 
+        // Variabler för panorering
+        private Point scrollStartPoint;
+        private Point scrollStartOffset;
+
+        private void Viewbox_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            // Kontrollera om användaren scrollar upp (zooma in) eller ner (zooma ut)
+            if (e.Delta > 0)
+            {
+                // Zooma in
+                if (GridScale.ScaleX < MaxZoom)
+                {
+                    GridScale.ScaleX += ZoomSpeed;
+                    GridScale.ScaleY += ZoomSpeed;
+                }
+            }
+            else
+            {
+                // Zooma ut
+                if (GridScale.ScaleX > MinZoom)
+                {
+                    GridScale.ScaleX -= ZoomSpeed;
+                    GridScale.ScaleY -= ZoomSpeed;
+                }
+            }
+
+            // Markera eventet som hanterat så att inte ScrollViewern scrollar samtidigt
+            e.Handled = true;
+        }
+
+        // --- PANORERINGS LOGIK (KLICKA OCH DRA) ---
+        private void MyScrollViewer_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            // Vi panorerar när vänster musknapp trycks ned
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                // Spara musens nuvarande position i förhållande till ScrollViewer
+                scrollStartPoint = e.GetPosition(MyScrollViewer);
+
+                // Spara var scrollisterna står just nu
+                scrollStartOffset.X = MyScrollViewer.HorizontalOffset;
+                scrollStartOffset.Y = MyScrollViewer.VerticalOffset;
+
+                // Fånga musen så att den inte tappar fokus om man drar utanför fönstret
+                MyScrollViewer.CaptureMouse();
+            }
+        }
+
+        private void MyScrollViewer_MouseMove(object sender, MouseEventArgs e)
+        {
+            // Kontrollera att musen faktiskt är fångad (att vi håller ned knappen)
+            if (MyScrollViewer.IsMouseCaptured)
+            {
+                Point currentPoint = e.GetPosition(MyScrollViewer);
+
+                // Räkna ut hur långt vi har dragit musen
+                double deltaX = currentPoint.X - scrollStartPoint.X;
+                double deltaY = currentPoint.Y - scrollStartPoint.Y;
+
+                // Uppdatera scrollpositionen (vi subtraherar eftersom vi vill dra innehållet)
+                MyScrollViewer.ScrollToHorizontalOffset(scrollStartOffset.X - deltaX);
+                MyScrollViewer.ScrollToVerticalOffset(scrollStartOffset.Y - deltaY);
+            }
+        }
+
+        private void MyScrollViewer_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                // Släpp musfånget när användaren släpper knappen
+                MyScrollViewer.ReleaseMouseCapture();
+            }
+        }
     }
 
 }
